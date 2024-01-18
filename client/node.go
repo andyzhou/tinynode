@@ -14,6 +14,8 @@ import (
 
 /*
  * node face
+ * @author <AndyZhou>
+ * @mail <diudiu8848@163.com>
  * - one node opt and data face
  */
 

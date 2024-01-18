@@ -10,6 +10,8 @@ import (
 
 /*
  * monitor face
+ * @author <AndyZhou>
+ * @mail <diudiu8848@163.com>
  * - connect one monitor and sync data
  * - cache the nodes of one monitor server
  * - other opt with monitor server

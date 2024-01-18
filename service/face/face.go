@@ -4,6 +4,8 @@ import "sync"
 
 /*
  * inter face entry
+ * @author <AndyZhou>
+ * @mail <diudiu8848@163.com>
  */
 
 //global variable

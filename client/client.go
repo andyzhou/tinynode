@@ -4,6 +4,8 @@ import "sync"
 
 /*
  * rpc client face
+ * @author <AndyZhou>
+ * @mail <diudiu8848@163.com>
  * - include base rpc and running data opt
  */
 

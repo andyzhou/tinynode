@@ -12,6 +12,8 @@ import (
 
 /*
  * core daemon service
+ * @author <AndyZhou>
+ * @mail <diudiu8848@163.com>
  */
 
 //service info

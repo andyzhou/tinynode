@@ -10,6 +10,8 @@ import (
 
 /*
  * callback for node data
+ * @author <AndyZhou>
+ * @mail <diudiu8848@163.com>
  * - process access node data request
  */
 

@@ -8,6 +8,8 @@ import (
 
 /*
  * rpc client face
+ * @author <AndyZhou>
+ * @mail <diudiu8848@163.com>
  * - send request to service
  * - real time receive node sync pass stream way
  * - support local and multi modes
