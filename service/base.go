@@ -19,11 +19,10 @@ func (f *BaseService) PrintAll() {
 func (f *BaseService) PrintServiceUsage() {
 	fmt.Println("usage:")
 	//for chunk
-	fmt.Printf(" %v -%v <rpc port> -%v <log path> -%v [monitors] \n",
+	fmt.Printf(" %v -%v <rpc port> -%v <log path>\n",
 		define.AppName,
 		cmd.NameOfPort,
 		cmd.NameOfLog,
-		cmd.NameOfMonitors,
 	)
 	fmt.Println()
 }

@@ -42,6 +42,14 @@ func start(c *cli.Context) error {
 }
 
 func main() {
+	//defer
+	defer func() {
+		//clean up
+		if logger != nil {
+			logger.Close()
+		}
+	}()
+
 	//get command flags
 	flags := cmd.Flags()
 
@@ -57,13 +65,9 @@ func main() {
 	//start app
 	err := app.Run(os.Args)
 	if err != nil {
-		log.Fatalf("main run err: %v", err)
+		log.Fatalf("%v run err: %v\n", define.AppName, err)
 		return
 	}
 
-	//clean up
-	if logger != nil {
-		logger.Close()
-	}
 	log.Printf("%v run succeed!\n", define.AppName)
 }

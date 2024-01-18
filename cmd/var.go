@@ -3,7 +3,6 @@ package cmd
 //flag field name
 const (
 	NameOfPort     = "port"     //rpc port
-	NameOfMonitors = "monitors" //all addr split by ','
 	NameOfLog      = "log"      //log path
 )
 
@@ -11,7 +10,6 @@ const (
 type (
 	ServiceCfg struct {
 		RpcPort  int
-		Monitors string //addr split by ','
 		LogPath  string
 	}
 )

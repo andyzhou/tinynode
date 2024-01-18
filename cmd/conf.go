@@ -20,7 +20,6 @@ func InitRunCmdCfg(c *cli.Context) {
 func Flags() []cli.Flag  {
 	return []cli.Flag{
 		&cli.IntFlag{Name: NameOfPort, Usage: "rpc service port"},
-		&cli.StringFlag{Name: NameOfMonitors, Usage: "monitor addr list"},
 		&cli.StringFlag{Name: NameOfLog, Usage: "log path"},
 	}
 }
@@ -29,7 +28,6 @@ func Flags() []cli.Flag  {
 func GetServiceCfg(c *cli.Context) *ServiceCfg {
 	cfg := &ServiceCfg{
 		RpcPort: c.Int(NameOfPort),
-		Monitors: c.String(NameOfMonitors),
 		LogPath: c.String(NameOfLog),
 	}
 	return cfg
