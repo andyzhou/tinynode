@@ -3,6 +3,8 @@ github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03
 github.com/BurntSushi/toml v1.3.2/go.mod h1:CxXYINrC8qIiEnFrOxCa7Jy5BFHlXnUU2pbicEuybxQ=
 github.com/andyzhou/tinylib v0.0.0-20240117075619-2b164dde9845 h1:hMXr4AjP8wlDcQheJaOiXJZuMuzMvlRd83nhTx+jvb4=
 github.com/andyzhou/tinylib v0.0.0-20240117075619-2b164dde9845/go.mod h1:4DShYNlU1CiCwtbzELdn9ez4k5M0Fx2mUGv9RF3GXkw=
+github.com/andyzhou/tinylib v0.0.0-20240118111715-91cb1c617fcf h1:qdFtzvXdkSJs7qjc2/ZuG50a0sOMCIzc576GHES5pZQ=
+github.com/andyzhou/tinylib v0.0.0-20240118111715-91cb1c617fcf/go.mod h1:4DShYNlU1CiCwtbzELdn9ez4k5M0Fx2mUGv9RF3GXkw=
 github.com/andyzhou/tinyrpc v0.0.0-20240117114303-ab39e54340b0 h1:oZTHMysAsMrUeEM4o2N528dWGNMdGF7HM0IhgJoy7o0=
 github.com/andyzhou/tinyrpc v0.0.0-20240117114303-ab39e54340b0/go.mod h1:ow1PIMGjwb7zNo74viw9vKJX4QUAyGmfabM2XXkNtgU=
 github.com/andyzhou/tinyrpc v0.0.0-20240118082306-36e3faf2123f h1:ZmbbTchf+3W6GPQMIad+dC2O/cWvYZdnpMZE0XZcFgA=
