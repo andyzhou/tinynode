@@ -100,6 +100,7 @@ func (f *Client) GenSyncNodeReq() *json.SyncNodeReq {
 }
 
 //set cb for node notify
+//call cb by stream way
 func (f *Client) SetCBForNodeNotify(cb func(info *json.NodeInfo) error) {
 	if cb == nil {
 		return

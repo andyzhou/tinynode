@@ -6,6 +6,7 @@ import (
 	"github.com/andyzhou/tinynode/json"
 	"log"
 	"sync"
+	"time"
 )
 
 /*
@@ -23,6 +24,23 @@ const (
 func cbForNodeNotify(info *json.NodeInfo) error {
 	log.Printf("info:%v\n", info)
 	return nil
+}
+
+func getNodes(c *tinynode.Client) {
+	if c == nil {
+		return
+	}
+	monitor, _ := c.GetMonitor(MonitorAddr)
+	if monitor == nil {
+		return
+	}
+
+	for {
+		//get nodes
+		nodes, _ := monitor.GetNodesInfo()
+		log.Printf("nodes:%v\n", nodes)
+		time.Sleep(time.Second)
+	}
 }
 
 func main() {
@@ -54,6 +72,9 @@ func main() {
 	if err != nil {
 		log.Printf("sync node failed, err:%v\n", err.Error())
 	}
+
+	//spawn son process
+	go getNodes(c)
 
 	//wait
 	wg.Wait()

@@ -90,6 +90,7 @@ func (f *Monitor) SyncNodeInfo(
 		return err
 	}
 	if node == nil {
+		//init new node
 		node, err = f.initNewNode(req)
 		if err != nil {
 			return err
@@ -120,19 +121,43 @@ func (f *Monitor) SetCBForNodeNotify(cb func(info *json.NodeInfo) error) {
 //private func
 ////////////////
 
+//inter cb for node notify
+func (f *Monitor) interCBForNodeNotify(info *json.NodeInfo) error {
+	//check
+	if info == nil || info.Address == "" {
+		return errors.New("invalid parameter")
+	}
+
+	//sync into run env data
+	nodeObj, _ := f.getNodeByAddr(info.Address)
+	if nodeObj != nil {
+		nodeObj.SyncNodeInfo(info)
+	}
+
+	//check and call cb of outside
+	if f.cbForNodeNotify != nil {
+		f.cbForNodeNotify(info)
+	}
+	return nil
+}
+
 //init new node
 func (f *Monitor) initNewNode(
-	obj *json.SyncNodeReq) (*Node, error) {
+	req *json.SyncNodeReq) (*Node, error) {
 	//check
-	if obj == nil || obj.Address == "" {
+	if req == nil || req.Address == "" {
 		return nil, errors.New("invalid parameter")
 	}
 	//init new node
 	node := NewNode()
-	err := node.InitNode(f.monitorAddr, f.cbForNodeNotify)
+	err := node.InitNode(f.monitorAddr, req, f.interCBForNodeNotify)
 	if err != nil {
 		return nil, err
 	}
+	//sync into run env map
+	f.Lock()
+	defer f.Unlock()
+	f.clientNodeMap[req.Address] = node
 	return node, nil
 }
 

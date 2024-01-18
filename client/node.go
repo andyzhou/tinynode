@@ -9,6 +9,7 @@ import (
 	"github.com/andyzhou/tinyrpc/proto"
 	"log"
 	"sync"
+	"time"
 )
 
 /*
@@ -48,11 +49,22 @@ func (f *Node) GetNodeInfo() *json.NodeInfo {
 	return f.info
 }
 
-//sync node info
-//send to server and store in run env
-func (f *Node) SyncNodeInfo(
-	req *json.SyncNodeReq) error {
+//sync node info into run env
+func (f *Node) SyncNodeInfo(info *json.NodeInfo) error {
 	//check
+	if info == nil || info.Address == "" {
+		return errors.New("invalid parameter")
+	}
+	if f.info == nil {
+		return errors.New("node info in run env is nil")
+	}
+	//sync node info
+	f.Lock()
+	defer f.Unlock()
+	f.info.Tag = info.Tag
+	f.info.Group = info.Group
+	f.info.Stat = info.Stat
+	f.info.ActiveTime = time.Now().Unix()
 	return nil
 }
 
@@ -102,15 +114,14 @@ func (f *Node) SendGenRequest(
 	return resp, err
 }
 
-//
-
 //init new node to connect server
 func (f *Node) InitNode(
 		serverAddr string,
+		req *json.SyncNodeReq,
 		cbForNodeNotify func(info *json.NodeInfo) error,
 	) error {
 	//check
-	if serverAddr == "" {
+	if serverAddr == "" || req == nil {
 		return errors.New("invalid parameter")
 	}
 
@@ -134,9 +145,21 @@ func (f *Node) InitNode(
 		return err
 	}
 
-	//sync rpc client
+	//init node info
+	nodeInfo := json.NewNodeInfo()
+	nodeInfo.Address = req.Address
+	nodeInfo.Tag = req.Tag
+	nodeInfo.Group = req.Group
+	nodeInfo.Stat = define.NodeStatOfActive
+	nodeInfo.ActiveTime = time.Now().Unix()
+	if req.Stat > define.NodeStatOfNone {
+		nodeInfo.Stat = req.Stat
+	}
+
+	//sync node info and rpc client
 	f.Lock()
 	defer f.Unlock()
+	f.info = nodeInfo
 	f.client = newClient
 	return nil
 }
