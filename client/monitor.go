@@ -19,6 +19,7 @@ import (
 type Monitor struct {
 	monitorAddr string //monitor address
 	clientNodeMap map[string]*Node //nodeAddr -> *Node
+	cbForNodeNotify func(*json.NodeInfo) error
 	sync.RWMutex
 }
 
@@ -107,6 +108,14 @@ func (f *Monitor) SyncNodeInfo(
 	return err
 }
 
+//set cb for node notify
+func (f *Monitor) SetCBForNodeNotify(cb func(info *json.NodeInfo) error) {
+	if cb == nil {
+		return
+	}
+	f.cbForNodeNotify = cb
+}
+
 ////////////////
 //private func
 ////////////////
@@ -120,7 +129,7 @@ func (f *Monitor) initNewNode(
 	}
 	//init new node
 	node := NewNode()
-	err := node.InitNode(f.monitorAddr)
+	err := node.InitNode(f.monitorAddr, f.cbForNodeNotify)
 	if err != nil {
 		return nil, err
 	}
@@ -143,8 +152,4 @@ func (f *Monitor) getNodeByAddr(
 		return v, nil
 	}
 	return v, nil
-}
-
-//inter init
-func (f *Monitor) interInit() {
 }

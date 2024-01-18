@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/andyzhou/tinylib v0.0.0-20240117075619-2b164dde9845
-	github.com/andyzhou/tinyrpc v0.0.0-20240117114303-ab39e54340b0
+	github.com/andyzhou/tinyrpc v0.0.0-20240118082306-36e3faf2123f
 	github.com/urfave/cli v1.22.14
 )
 

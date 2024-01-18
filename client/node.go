@@ -21,6 +21,7 @@ type Node struct {
 	info *json.NodeInfo //node info
 	client *tinyrpc.Client //rpc client obj
 	serverDown bool
+	cbForNodeNotify func(info *json.NodeInfo) error //reference
 	sync.RWMutex
 }
 
@@ -101,9 +102,13 @@ func (f *Node) SendGenRequest(
 	return resp, err
 }
 
+//
+
 //init new node to connect server
 func (f *Node) InitNode(
-	serverAddr string) error {
+		serverAddr string,
+		cbForNodeNotify func(info *json.NodeInfo) error,
+	) error {
 	//check
 	if serverAddr == "" {
 		return errors.New("invalid parameter")
@@ -115,9 +120,15 @@ func (f *Node) InitNode(
 	if err != nil {
 		return err
 	}
+	if cbForNodeNotify != nil {
+		f.cbForNodeNotify = cbForNodeNotify
+	}
 
-	//set callback and connect server
+	//set callback
 	newClient.SetServerNodeDownCallBack(f.cbForServerNodeDown)
+	newClient.SetStreamCallBack(f.cbForReceiveStreamData)
+
+	//connect server
 	err = newClient.ConnectServer()
 	if err != nil {
 		return err
@@ -151,6 +162,31 @@ func (f *Node) senGenRpcRequest(
 	return resp, subErrThree
 }
 
+//cb for receive stream data
+func (f *Node) cbForReceiveStreamData(
+	in *proto.Packet) error {
+	var (
+		err error
+	)
+	//check
+	if in == nil || in.MessageId <= define.MessageIdOfNone ||
+		in.Data == nil {
+		return errors.New("invalid parameter")
+	}
+
+	//decode data
+	nodeObj := json.NewNodeInfo()
+	nodeObj.Decode(in.Data, nodeObj)
+	if nodeObj == nil || nodeObj.Address == "" {
+		return errors.New("invalid pack data")
+	}
+
+	//check and run cb for node notify
+	if f.cbForNodeNotify != nil {
+		err = f.cbForNodeNotify(nodeObj)
+	}
+	return err
+}
 
 //cb for server node down
 func (f *Node) cbForServerNodeDown(
@@ -164,13 +200,6 @@ func (f *Node) cbForServerNodeDown(
 	f.Lock()
 	f.serverDown = true
 	f.Unlock()
-
-	////update node stat
-	//if f.info != nil {
-	//	f.Lock()
-	//	f.info.Stat = define.NodeStatOfDown
-	//	f.Unlock()
-	//}
 
 	//re-connect target server force
 	//run in loop?

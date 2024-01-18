@@ -2,6 +2,7 @@ package client
 
 import (
 	"errors"
+	"github.com/andyzhou/tinynode/json"
 	"sync"
 )
 
@@ -15,6 +16,7 @@ import (
 //face info
 type Rpc struct {
 	monitorMap map[string]*Monitor //addr -> *Monitor
+	cbForNodeNotify func(info *json.NodeInfo) error
 	sync.RWMutex
 }
 
@@ -95,12 +97,23 @@ func (f *Rpc) AddMonitor(addrSlice ...string) error {
 		if v != nil {
 			continue
 		}
+
 		//init new monitor
 		monitor := NewMonitor(addr)
+		monitor.SetCBForNodeNotify(f.cbForNodeNotify)
+
 		//sync into map
 		f.Lock()
 		f.monitorMap[addr] = monitor
 		f.Unlock()
 	}
 	return nil
+}
+
+//set cb for node notify
+func (f *Rpc) SetCBForNodeNotify(cb func(info *json.NodeInfo) error) {
+	if cb == nil {
+		return
+	}
+	f.cbForNodeNotify = cb
 }

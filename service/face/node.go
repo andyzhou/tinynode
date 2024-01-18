@@ -3,6 +3,7 @@ package face
 import (
 	"errors"
 	"github.com/andyzhou/tinylib/queue"
+	"github.com/andyzhou/tinynode/define"
 	"github.com/andyzhou/tinynode/json"
 	"sync"
 	"time"
@@ -56,6 +57,10 @@ func (f *Node) SyncNode(
 	nodeInfo.Tag = req.Tag
 	nodeInfo.Address = req.Address
 	nodeInfo.Group = req.Group
+	if req.Stat > define.NodeStatOfNone &&
+		req.Stat <= define.NodeStatOfBusy {
+		nodeInfo.Stat = req.Stat
+	}
 	nodeInfo.ActiveTime = time.Now().Unix()
 	f.nodeMap.Store(remoteAddr, nodeInfo)
 	return nil
@@ -110,17 +115,16 @@ func (f *Node) InitNode(
 	if remoteAddr == "" {
 		return errors.New("invalid parameter")
 	}
-	nodeInfo, err := f.getNodeInfo(remoteAddr)
-	if err != nil {
-		return err
+	nodeInfo, _ := f.getNodeInfo(remoteAddr)
+	if nodeInfo != nil {
+		return errors.New("node had init")
 	}
-	if nodeInfo == nil {
-		//init new
-		nodeInfo = json.NewNodeInfo()
-		nodeInfo.RemoteAddr = remoteAddr
-		nodeInfo.ActiveTime = time.Now().Unix()
-		f.nodeMap.Store(remoteAddr, nodeInfo)
-	}
+	//init new
+	nodeInfo = json.NewNodeInfo()
+	nodeInfo.RemoteAddr = remoteAddr
+	nodeInfo.Stat = define.NodeStatOfActive
+	nodeInfo.ActiveTime = time.Now().Unix()
+	f.nodeMap.Store(remoteAddr, nodeInfo)
 	return nil
 }
 
@@ -129,7 +133,8 @@ func (f *Node) InitNode(
 ///////////////
 
 //get node info by remote addr
-func (f *Node) getNodeInfo(remoteAddr string) (*json.NodeInfo, error) {
+func (f *Node) getNodeInfo(
+	remoteAddr string) (*json.NodeInfo, error) {
 	//check
 	if remoteAddr == "" {
 		return nil, errors.New("invalid parameter")

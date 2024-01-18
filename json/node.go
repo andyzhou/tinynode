@@ -26,9 +26,10 @@ type NodesInfo struct {
 
 //sync node req
 type SyncNodeReq struct {
-	Address    string `json:"address"`
-	Tag        string `json:"tag"`
-	Group      string `json:"group"`
+	Address string `json:"address"`
+	Tag     string `json:"tag"`
+	Group   string `json:"group"`
+	Stat    int    `json:"stat"`
 	util.BaseJson
 }
 

@@ -94,6 +94,19 @@ func (f *Client) SyncNode(
 	return err
 }
 
+//gen new node sync req
+func (f *Client) GenSyncNodeReq() *json.SyncNodeReq {
+	return json.NewSyncNodeReq()
+}
+
+//set cb for node notify
+func (f *Client) SetCBForNodeNotify(cb func(info *json.NodeInfo) error) {
+	if cb == nil {
+		return
+	}
+	f.c.GetRpc().SetCBForNodeNotify(cb)
+}
+
 //api for monitor
 //get current monitor addr
 func (f *Client) GetMonitorAddr() []string {
