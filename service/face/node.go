@@ -153,7 +153,7 @@ func (f *Node) getNodeInfo(
 }
 
 //cb for node opt
-func (f *Node) cbForNodeOpt(data interface{}) ([]byte, error) {
+func (f *Node) cbForNodeOpt(data interface{}) (interface{}, error) {
 	return nil, nil
 }
 
