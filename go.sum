@@ -5,6 +5,8 @@ github.com/andyzhou/tinylib v0.0.0-20240117075619-2b164dde9845 h1:hMXr4AjP8wlDcQ
 github.com/andyzhou/tinylib v0.0.0-20240117075619-2b164dde9845/go.mod h1:4DShYNlU1CiCwtbzELdn9ez4k5M0Fx2mUGv9RF3GXkw=
 github.com/andyzhou/tinylib v0.0.0-20240118111715-91cb1c617fcf h1:qdFtzvXdkSJs7qjc2/ZuG50a0sOMCIzc576GHES5pZQ=
 github.com/andyzhou/tinylib v0.0.0-20240118111715-91cb1c617fcf/go.mod h1:4DShYNlU1CiCwtbzELdn9ez4k5M0Fx2mUGv9RF3GXkw=
+github.com/andyzhou/tinylib v0.0.0-20240119055450-7b7083676715 h1:ldXzpGViJlTy1nuuC3UXKqEnozEP4Fh4pYeGkQ8EqKs=
+github.com/andyzhou/tinylib v0.0.0-20240119055450-7b7083676715/go.mod h1:4DShYNlU1CiCwtbzELdn9ez4k5M0Fx2mUGv9RF3GXkw=
 github.com/andyzhou/tinyrpc v0.0.0-20240117114303-ab39e54340b0 h1:oZTHMysAsMrUeEM4o2N528dWGNMdGF7HM0IhgJoy7o0=
 github.com/andyzhou/tinyrpc v0.0.0-20240117114303-ab39e54340b0/go.mod h1:ow1PIMGjwb7zNo74viw9vKJX4QUAyGmfabM2XXkNtgU=
 github.com/andyzhou/tinyrpc v0.0.0-20240118082306-36e3faf2123f h1:ZmbbTchf+3W6GPQMIad+dC2O/cWvYZdnpMZE0XZcFgA=
