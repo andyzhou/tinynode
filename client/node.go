@@ -213,9 +213,52 @@ func (f *Node) cbForReceiveStreamData(
 	return err
 }
 
+//re-connect downed server node
+func (f *Node) reConnectDownedServerNode() error {
+	var (
+		finalClient *tinyrpc.Client
+	)
+	//check
+	if f.info == nil {
+		return errors.New("node info not init")
+	}
+
+	//get key data
+	nodeAddr := f.info.Address
+
+	//loop connect server
+	for {
+		//init new rpc client
+		newClient := tinyrpc.NewClient()
+		err := newClient.SetAddress(f.info.Address)
+		newClient.SetServerNodeDownCallBack(f.cbForServerNodeDown)
+
+		//connect server
+		err = newClient.ConnectServer()
+		if err != nil {
+			log.Printf("connect rpc server %v failed, err:%v\n", nodeAddr, err.Error())
+			newClient.Quit()
+			time.Sleep(time.Second * define.NodeConnDelaySeconds)
+		}else{
+			//connect success
+			log.Printf("connect rpc server %v success..\n", nodeAddr)
+			finalClient = newClient
+			break
+		}
+	}
+
+	//update active client and status
+	f.Lock()
+	defer f.Unlock()
+	f.serverDown = false
+	f.client = finalClient
+	f.info.Stat = define.NodeStatOfActive
+	return nil
+}
+
+
 //cb for server node down
-func (f *Node) cbForServerNodeDown(
-	serverAddr string) error {
+func (f *Node) cbForServerNodeDown(serverAddr string) error {
 	//check
 	if serverAddr == "" {
 		return errors.New("invalid parameter")
@@ -223,14 +266,15 @@ func (f *Node) cbForServerNodeDown(
 
 	//update inter stat
 	f.Lock()
+	//force close rpc client
+	if f.client != nil {
+		f.client.Quit()
+	}
 	f.serverDown = true
 	f.Unlock()
 
 	//re-connect target server force
 	//run in loop?
-	err := f.client.ConnectServer()
-	if err != nil {
-		log.Printf("node.CBForServerNodeDown, serverAddr:%v, err:%v\n", serverAddr, err.Error())
-	}
-	return err
+	go f.reConnectDownedServerNode()
+	return nil
 }
